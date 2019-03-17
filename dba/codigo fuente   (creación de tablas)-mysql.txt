@@ -1,0 +1,182 @@
+create database LEDATEL;
+
+create table tb_proveedor(
+codigoproveedor char(6),
+sociedad varchar(50),
+representante varchar(50),
+celular char(9),
+direccion varchar(50),
+email varchar(50),
+tipo varchar(50),
+actividad varchar(50),
+estado char(1),
+constraint pk_proveedor primary key(codigoproveedor));
+
+
+create table tb_producto(
+codigoRegP int auto_increment,
+codigoproveedor char(6),
+tipo varchar(50),
+codigoProducto varchar(10),
+marca varchar(50),
+serie varchar(50),
+precioCompra decimal(10,2),
+precioVenta  decimal(10,2),
+cantidad int ,
+observacion varchar(50),
+estado varchar(30),
+constraint pk_producto primary key(codigoRegP),
+constraint fk_prov_prod foreign key(codigoproveedor) references tb_proveedor(codigoproveedor));
+
+
+
+create table tb_compras(
+codigocompra int auto_increment,
+codigoRegP int,
+cantidad int,
+costos decimal,
+fecha date,
+constraint pk_compras primary key(codigocompra),
+constraint fk_comp_prod foreign key(codigoRegP) references tb_producto(codigoRegP));
+
+
+
+create table tb_cliente(
+codigocliente int auto_increment,
+tipo varchar(30),
+DNI char(8),
+datos varchar(50),
+direccion varchar(50),
+celular char(9),
+email varchar(50),
+estado char(1),
+constraint pk_cliente primary key(codigocliente));
+
+
+create table tb_caja(
+fecha date ,
+inicio decimal(10,2),
+compras decimal(10,2),
+ventas decimal(10,2),
+Reparaciones decimal(10,2),
+nuevoSaldo decimal(10,2),
+constraint pk_fecha primary key(fecha));
+
+
+
+create table tb_empleado(
+codigoempleado char(6),
+tipoEmpleado varchar(30),
+dni char(8),
+apellidos varchar(30),
+nombres varchar(30),
+sexo char(1),
+direccion varchar(50),
+correo varchar(50),
+telefono varchar(10),
+sueldo decimal(10,2),
+estado varchar(10),
+idEmpleado varchar(30),
+clave varchar(30),
+constraint pk_empleado primary key(codigoempleado),
+constraint u_ide unique (idEmpleado));
+
+
+create table tb_servicio(
+codigoservicio int auto_increment,
+observacion varchar(50),
+costo decimal(10,2),
+fecha date,
+codigoRegP int,
+constraint pk_servicio primary key(codigoservicio),
+constraint fk_ser_prd foreign key(codigoRegP) references tb_producto(codigoRegP));
+
+
+create table tb_factura(
+codigoFactura int auto_increment,
+factura varchar(10),
+
+ruc varchar(15),
+fecha date ,
+igv decimal(10,2),
+subtotal decimal(10,2),
+total decimal(10,2),
+tipodepago varchar(10),
+estado varchar(10),
+
+caja date,
+codigoempleado char(6),
+codigocliente int,
+constraint pk_factu primary key(codigoFactura),
+constraint fk_fac_emp foreign key(codigoempleado) references tb_empleado(codigoempleado),
+constraint fk_fact_cli foreign key(codigocliente) references tb_cliente(codigocliente),
+constraint fk_caj_fact foreign key(caja) references tb_caja(fecha));
+
+
+
+create table tb_detalle_venta(
+codigoFactura int,
+codigoRegP int,
+codigoempleado char(6),
+precio decimal(10,2),
+cantidad int,
+importe decimal(10,2),
+constraint pk_det_ven primary key(codigoFactura,codigoRegP),
+constraint fk_prd_det foreign key(codigoRegP) references tb_producto(codigoRegP));
+
+
+create table tb_detalle_servicios(
+codigoFactura int,
+codigoservicio int,
+precio decimal(10,2),
+cantidad int,
+importe decimal(10,2),
+constraint pk_det_ser primary key(codigoFactura,codigoservicio),
+constraint fk_ser_det foreign key(codigoservicio) references tb_servicio(codigoservicio));
+
+create table tb_solicitud(
+codSolicitud int auto_increment,
+marcaProducto varchar(50),
+modeloProducto varchar(50),
+demanda text,
+constraint pk_codSol primary key(codSolicitud));
+
+create table tb_pedido(
+codigocliente int,
+codSolicitud int,
+fecha date,
+cantidad int,
+constraint pk_pedid primary key(codigocliente,codSolicitud),
+constraint fk_p_c foreign key(codigocliente) references tb_cliente(codigocliente),
+constraint fk_p_s foreign key(codSolicitud) references tb_solicitud(codSolicitud));
+
+create table tb_informacion(
+codInformacion int auto_increment,
+codigoRegP int ,
+fechaLanzamiento date,
+demanda text,
+caracteristicas text,
+alertas text,
+estado varchar(50),
+constraint pk_inf primary key(codInformacion) ,
+constraint fk_inf_prod foreign key(codigoRegP) references tb_producto(codigoRegP));
+
+
+create table tb_contrato(
+codContrado char(6),
+codigocliente int,
+codigoRegP integer,
+cantidad int,
+precioActual decimal(10,2),
+precioNuevo decimal(10,2),
+periodo int,
+pago decimal(10,2),
+letra int,
+fechapagos date,
+constraint pk_contr primary key(codContrado),
+constraint fk_crd_cli foreign key(codigocliente) references tb_cliente(codigocliente),
+constraint fk_crd_prd foreign key(codigoRegP) references tb_producto(codigoRegP));
+
+
+
+

@@ -1,0 +1,39 @@
+________________________________________________________________________________________________________________________________________________
+CREATE VIEW V_COMPRA_PRODUCTO
+AS
+SELECT P.CODIGOPRODUCTO,P.MARCA,P.SERIE,P.PRECIOCOMPRA,P.PRECIOVENTA,C.CANTIDAD,C.FECHA,PR.SOCIEDAD,P.ESTADO FROM
+TB_PRODUCTO P , TB_COMPRAS C , TB_PROVEEDOR PR WHERE P.CODIGOPROVEEDOR=PR.CODIGOPROVEEDOR AND P.CODIGOREGP=C.CODIGOREGP;
+________________________________________________________________________________________________________________________________________________
+CREATE VIEW V_VENTAS
+AS
+SELECT F.FACTURA, P.CODIGOPRODUCTO,P.MARCA,P.SERIE,D.CANTIDAD,P.PRECIOVENTA,D.IMPORTE,F.FECHA,P.ESTADO FROM TB_PRODUCTO P , 
+TB_DETALLE_VENTA D,TB_FACTURA F
+WHERE P.CODIGOREGP=D.CODIGOREGP AND F.CODIGOFACTURA=D.CODIGOFACTURA ORDER BY F.FACTURA DESC 
+________________________________________________________________________________________________________________________________________________
+CREATE VIEW V_REPARACIONES
+AS
+SELECT F.FACTURA,P.TIPO ,P.CODIGOPRODUCTO,P.MARCA,P.SERIE,S.OBSERVACION , S.COSTO,D.CANTIDAD,D.IMPORTE,F.FECHA FROM TB_PRODUCTO P,TB_SERVICIO S, TB_DETALLE_SERVICIOS D , TB_FACTURA F
+WHERE F.CODIGOFACTURA=D.CODIGOFACTURA AND D.CODIGOSERVICIO=S.CODIGOSERVICIO AND  S.CODIGOrEGP=P.CODIGOrEGP;
+________________________________________________________________________________________________________________________________________________
+create view v_tb_empleado
+as
+select codigoEmpleado,dni,apellidos,nombres,direccion,correo,telefono,tipoempleado,sueldo ,estado from tb_empleado  where estado='TRABAJANDO';
+________________________________________________________________________________________________________________________________________________
+CREATE VIEW V_COMPRAS
+AS
+SELECT P.CODIGOPRODUCTO,P.MARCA,P.SERIE,C.COSTOS,C.CANTIDAD,C.FECHA,PR.SOCIEDAD,P.ESTADO FROM
+TB_PRODUCTO P , TB_COMPRAS C , TB_PROVEEDOR PR WHERE P.CODIGOPROVEEDOR=PR.CODIGOPROVEEDOR AND P.CODIGOREGP=C.CODIGOREGP
+________________________________________________________________________________________________________________________________________________
+CREATE VIEW V_CONTRATO
+AS
+  SELECT CN.CODCONTRADO,C.DNI,C.DATOS,P.CODIGOPRODUCTO,P.MARCA,P.SERIE FROM tb_proDUCTO P, TB_CONTRATO CN,TB_CLIENTE C 
+where cn.codigoRegp=p.codigoRegp and c.codigocliente=cn.codigocliente;
+________________________________________________________________________________________________________________________________________________
+
+create view
+select cn.codcontrado,c.datos,c.DNI,(precioActual)pago ,cn. letra,  cn.fechapagos,p.marca,p.serie ,cn.cantidad
+from tb_contrato cn, tb_cliente c, tb_producto p
+where c.codigoCliente=cn.codigoCliente and p.codigoRegp=cn.codigoRegp and cn.letra > 0 order by 1 desc
+________________________________________________________________________________________________________________________________________________
+
+________________________________________________________________________________________________________________________________________________
